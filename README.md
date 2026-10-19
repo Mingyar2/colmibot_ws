@@ -8,6 +8,9 @@ Se desarrolló un paquete en ROS 2 llamado `joystick_control` para teleoperar el
 * **Inyección de puerto físico:** Se decidió inyectar el parámetro del puerto físico (ej. `/dev/input/js2`) directamente desde el archivo launch (`joystick_turtlesim.launch.py`) para evitar conflictos con las interfaces virtuales de VirtualBox.
 * **Modos de velocidad (Mejora):** Se implementaron multiplicadores de velocidad asignados a los botones físicos (R1 para "Modo Turbo" y L1 para "Modo Precisión") para hacer el control más robusto y dinámico.
 
+* Enlace de video en carpeta de seminario*
+* https://drive.google.com/file/d/1bQa5RJuH_0bkw-OlDK1DOfgR2vXcCQPo/view?usp=drive_link
+
 **Comandos utilizados para correr la actividad:**
 ```bash
 # Compilar el espacio de trabajo
