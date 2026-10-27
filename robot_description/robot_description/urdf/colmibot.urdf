@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<robot name="colmibot">
+
+  <link name="base_footprint"/>
+
+  <!-- JOINT PRINCIPAL -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.03" rpy="0 0 0"/> 
+  </joint>
+
+  <!-- CHASIS (BODY): Regresamos a la posición correcta con los huecos a los lados -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/CLM-Body.stl" scale="0.001 0.001 0.001" name="body_mesh"/>
+      </geometry>
+      <material name="light_gray">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+
+<!-- LLANTA IZQUIERDA (Prueba) -->
+  <joint name="wheel_left_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_left_link"/>
+    <!-- Posición: Mueve la llanta 11cm a la izquierda sobre el eje verde (). Sin rotar la articulación -->
+    <origin xyz="0.0 0.078 0.015" rpy="0 0 0"/> 
+    <!-- Eje de giro: Forzamos la rotación matemática sobre el eje verde () -->
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="wheel_left_link">
+    <visual>
+      <!-- Paramos el dibujo 3D de la llanta rotándolo 90 grados en X (-1.5708) -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/CLM-Llanta60mmD.stl" scale="0.001 0.001 0.001" name="wheel_l_mesh"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+  </link>
+    <!-- LLANTA DERECHA -->
+  <joint name="wheel_right_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_right_link"/>
+
+    <!-- Espejo lateral: Y negativo; 4 mm más cercana al chasis -->
+    <origin xyz="0.0 -0.078 0.015" rpy="0 0 0"/>
+
+    <!-- Ambas llantas giran alrededor del eje Y del chasis -->
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="wheel_right_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/CLM-Llanta60mmD.stl"
+          scale="0.001 0.001 0.001"
+          name="wheel_r_mesh"/>
+      </geometry>
+
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+  </link>
+  
+     <!-- ENSAMBLE SUPERIOR -->
+  <!-- base_link -> Plato -> Holder -> Plato -> Cámara -->
+  <!-- Separación inicial entre niveles: 30 mm -->
+
+  <!-- 1. PLATO INFERIOR SOBRE EL BODY -->
+  <joint name="plato_inferior_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="plato_inferior_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="plato_inferior_link">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="1.57079632679 0 0"/>
+
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/CLM-Plato.stl"
+          scale="1 1 1"
+          name="plato_inferior_mesh"/>
+      </geometry>
+
+      <material name="plato_inferior_gray">
+        <color rgba="0.1 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+
+  <!-- 2. HOLDER SOBRE EL PLATO INFERIOR -->
+  <joint name="holder_joint" type="fixed">
+    <parent link="plato_inferior_link"/>
+    <child link="holder_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="holder_link">
+    <visual>
+      <origin xyz="0 0 0.053" rpy="0 0 0"/>
+
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/CLM-Holder3TOF.stl"
+          scale="1 1 1"
+          name="holder_mesh"/>
+      </geometry>
+
+      <material name="holder_gray">
+        <color rgba="0.5 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+
+  <!-- 3. PLATO SUPERIOR SOBRE EL HOLDER -->
+  <joint name="plato_superior_joint" type="fixed">
+    <parent link="holder_link"/>
+    <child link="plato_superior_link"/>
+    <origin xyz="0 0 0.033" rpy="0 0 0"/>
+  </joint>
+
+  <link name="plato_superior_link">
+    <visual>
+      <origin xyz="0 0 0.06" rpy="1.57079632679 0 0"/>
+
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/CLM-Plato.stl"
+          scale="1 1 1"
+          name="plato_superior_mesh"/>
+      </geometry>
+
+      <material name="plato_superior_gray">
+        <color rgba="0.1 0.75 0.75 1"/>
+      </material>
+    </visual>
+  </link>
+
+
+  <!-- 4. CÁMARA SOBRE EL PLATO SUPERIOR -->
+  <joint name="camera_mount_joint" type="fixed">
+    <parent link="plato_superior_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin xyz="-0.18 0 0.098" rpy="1.57079632679 0 1.57079632679"/>
+
+      <geometry>
+        <mesh
+          filename="package://robot_description/meshes/CLM-LogitechC920Montaj.stl"
+          scale="0.001 0.001 0.001"
+          name="camera_mesh"/>
+      </geometry>
+
+      <material name="camera_dark_gray">
+        <color rgba="0.1 0.15 0.15 1"/>
+      </material>
+    </visual>
+  </link>
+
+
+</robot>
