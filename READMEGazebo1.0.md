@@ -41,4 +41,4 @@ rqt_graph
 2. **Llantas "acostadas" y robot flotando (Efecto trineo):** Una doble rotación en las etiquetas visuales provocaba que los cilindros de las ruedas actuaran como pilares, y el centro de colisión del chasis atravesaba el piso. **Solución:** Se reajustaron los ejes respetando el eje Y nativo de las mallas `.stl` y se elevó exclusivamente la caja de colisión del chasis (`Z=0.05 m`).
 
 ### Evidencia en Video
-[INSERTA AQUÍ TU ENLACE AL VIDEO DE YOUTUBE O DRIVE - Máximo 3 minutos]
+[(https://drive.google.com/drive/folders/1iZVMWeqhq63HSATzjVpsaB6486JIxd9g?usp=drive_link)]
