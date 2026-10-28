@@ -10,8 +10,13 @@
     <origin xyz="0 0 0.03" rpy="0 0 0"/> 
   </joint>
 
-  <!-- CHASIS (BODY): Regresamos a la posición correcta con los huecos a los lados -->
+  <!-- CHASIS (BODY) -->
   <link name="base_link">
+    <inertial>
+      <origin xyz="0 0.025 0" rpy="0 0 0"/>
+      <mass value="0.084"/>
+      <inertia ixx="0.000381" ixy="0.0" ixz="0.0" iyy="0.000741" iyz="0.0" izz="0.000394"/>
+    </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <geometry>
@@ -21,21 +26,32 @@
         <color rgba="0.8 0.8 0.8 1"/>
       </material>
     </visual>
+    <collision>
+      <!-- CORRECCIÓN: Subimos la caja 5cm para que el "suelo" de la caja no levante las llantas -->
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.15 0.1"/>
+      </geometry>
+    </collision>
   </link>
 
-<!-- LLANTA IZQUIERDA (Prueba) -->
+  <!-- LLANTA IZQUIERDA -->
   <joint name="wheel_left_joint" type="continuous">
     <parent link="base_link"/>
     <child link="wheel_left_link"/>
-    <!-- Posición: Mueve la llanta 11cm a la izquierda sobre el eje verde (). Sin rotar la articulación -->
-    <origin xyz="0.0 0.078 0.015" rpy="0 0 0"/> 
-    <!-- Eje de giro: Forzamos la rotación matemática sobre el eje verde () -->
+    <!-- El joint se mantiene en 0. El eje de giro natural es Y -->
+    <origin xyz="0 0.11 0" rpy="0 0 0"/> 
     <axis xyz="0 1 0"/>
   </joint>
 
   <link name="wheel_left_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.0195"/>
+      <inertia ixx="0.0000047" ixy="0.0" ixz="0.0" iyy="0.0000091" iyz="0.0" izz="0.0000047"/>
+    </inertial>
     <visual>
-      <!-- Paramos el dibujo 3D de la llanta rotándolo 90 grados en X (-1.5708) -->
+      <!-- El dibujo se mantiene en 0 para heredar el eje Y natural -->
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://robot_description/meshes/CLM-Llanta60mmD.stl" scale="0.001 0.001 0.001" name="wheel_l_mesh"/>
@@ -44,41 +60,48 @@
         <color rgba="0.1 0.1 0.1 1"/>
       </material>
     </visual>
+    <collision>
+      <!-- Rotamos el cilindro nativo de Gazebo (Z) 90 grados para que apunte en Y como una llanta -->
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.02"/>
+      </geometry>
+    </collision>
   </link>
-    <!-- LLANTA DERECHA -->
+
+  <!-- LLANTA DERECHA -->
   <joint name="wheel_right_joint" type="continuous">
     <parent link="base_link"/>
     <child link="wheel_right_link"/>
-
-    <!-- Espejo lateral: Y negativo; 4 mm más cercana al chasis -->
-    <origin xyz="0.0 -0.078 0.015" rpy="0 0 0"/>
-
-    <!-- Ambas llantas giran alrededor del eje Y del chasis -->
+    <origin xyz="0 -0.11 0" rpy="0 0 0"/> 
     <axis xyz="0 1 0"/>
   </joint>
 
   <link name="wheel_right_link">
-    <visual>
+    <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-
+      <mass value="0.0195"/>
+      <inertia ixx="0.0000047" ixy="0.0" ixz="0.0" iyy="0.0000091" iyz="0.0" izz="0.0000047"/>
+    </inertial>
+    <visual>
+      <!-- Rotamos 180 grados en Z para que la cara exterior apunte hacia afuera de este lado -->
+      <origin xyz="0 0 0" rpy="0 0 3.1416"/>
       <geometry>
-        <mesh
-          filename="package://robot_description/meshes/CLM-Llanta60mmD.stl"
-          scale="0.001 0.001 0.001"
-          name="wheel_r_mesh"/>
+        <mesh filename="package://robot_description/meshes/CLM-Llanta60mmD.stl" scale="0.001 0.001 0.001" name="wheel_r_mesh"/>
       </geometry>
-
       <material name="black">
         <color rgba="0.1 0.1 0.1 1"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.02"/>
+      </geometry>
+    </collision>
   </link>
   
-     <!-- ENSAMBLE SUPERIOR -->
-  <!-- base_link -> Plato -> Holder -> Plato -> Cámara -->
-  <!-- Separación inicial entre niveles: 30 mm -->
-
-  <!-- 1. PLATO INFERIOR SOBRE EL BODY -->
+  <!-- 1. PLATO INFERIOR -->
   <joint name="plato_inferior_joint" type="fixed">
     <parent link="base_link"/>
     <child link="plato_inferior_link"/>
@@ -86,24 +109,23 @@
   </joint>
 
   <link name="plato_inferior_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.0821"/>
+      <inertia ixx="0.000213" ixy="0.0" ixz="0.0" iyy="0.000223" iyz="0.0" izz="0.000436"/>
+    </inertial>
     <visual>
       <origin xyz="0 0 0.05" rpy="1.57079632679 0 0"/>
-
       <geometry>
-        <mesh
-          filename="package://robot_description/meshes/CLM-Plato.stl"
-          scale="1 1 1"
-          name="plato_inferior_mesh"/>
+        <mesh filename="package://robot_description/meshes/CLM-Plato.stl" scale="1 1 1" name="plato_inferior_mesh"/>
       </geometry>
-
       <material name="plato_inferior_gray">
         <color rgba="0.1 0 0 1"/>
       </material>
     </visual>
   </link>
 
-
-  <!-- 2. HOLDER SOBRE EL PLATO INFERIOR -->
+  <!-- 2. HOLDER -->
   <joint name="holder_joint" type="fixed">
     <parent link="plato_inferior_link"/>
     <child link="holder_link"/>
@@ -111,24 +133,23 @@
   </joint>
 
   <link name="holder_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.0136"/>
+      <inertia ixx="0.000020" ixy="0.0" ixz="0.0" iyy="0.0000025" iyz="0.0" izz="0.000019"/>
+    </inertial>
     <visual>
       <origin xyz="0 0 0.053" rpy="0 0 0"/>
-
       <geometry>
-        <mesh
-          filename="package://robot_description/meshes/CLM-Holder3TOF.stl"
-          scale="1 1 1"
-          name="holder_mesh"/>
+        <mesh filename="package://robot_description/meshes/CLM-Holder3TOF.stl" scale="1 1 1" name="holder_mesh"/>
       </geometry>
-
       <material name="holder_gray">
         <color rgba="0.5 0 0 1"/>
       </material>
     </visual>
   </link>
 
-
-  <!-- 3. PLATO SUPERIOR SOBRE EL HOLDER -->
+  <!-- 3. PLATO SUPERIOR -->
   <joint name="plato_superior_joint" type="fixed">
     <parent link="holder_link"/>
     <child link="plato_superior_link"/>
@@ -136,24 +157,23 @@
   </joint>
 
   <link name="plato_superior_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.0821"/>
+      <inertia ixx="0.000213" ixy="0.0" ixz="0.0" iyy="0.000223" iyz="0.0" izz="0.000436"/>
+    </inertial>
     <visual>
       <origin xyz="0 0 0.06" rpy="1.57079632679 0 0"/>
-
       <geometry>
-        <mesh
-          filename="package://robot_description/meshes/CLM-Plato.stl"
-          scale="1 1 1"
-          name="plato_superior_mesh"/>
+        <mesh filename="package://robot_description/meshes/CLM-Plato.stl" scale="1 1 1" name="plato_superior_mesh"/>
       </geometry>
-
       <material name="plato_superior_gray">
         <color rgba="0.1 0.75 0.75 1"/>
       </material>
     </visual>
   </link>
 
-
-  <!-- 4. CÁMARA SOBRE EL PLATO SUPERIOR -->
+  <!-- 4. CÁMARA -->
   <joint name="camera_mount_joint" type="fixed">
     <parent link="plato_superior_link"/>
     <child link="camera_link"/>
@@ -161,21 +181,35 @@
   </joint>
 
   <link name="camera_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1814"/>
+      <inertia ixx="0.000070" ixy="0.0" ixz="0.0" iyy="0.000130" iyz="0.0" izz="0.000124"/>
+    </inertial>
     <visual>
       <origin xyz="-0.18 0 0.098" rpy="1.57079632679 0 1.57079632679"/>
-
       <geometry>
-        <mesh
-          filename="package://robot_description/meshes/CLM-LogitechC920Montaj.stl"
-          scale="0.001 0.001 0.001"
-          name="camera_mesh"/>
+        <mesh filename="package://robot_description/meshes/CLM-LogitechC920Montaj.stl" scale="0.001 0.001 0.001" name="camera_mesh"/>
       </geometry>
-
       <material name="camera_dark_gray">
         <color rgba="0.1 0.15 0.15 1"/>
       </material>
     </visual>
   </link>
 
+  <!-- PLUGIN DE CONTROL DIFERENCIAL PARA GAZEBO HARMONIC -->
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>wheel_left_joint</left_joint>
+      <right_joint>wheel_right_joint</right_joint>
+      <wheel_separation>0.22</wheel_separation>
+      <wheel_radius>0.03</wheel_radius>
+      <max_linear_acceleration>1.0</max_linear_acceleration>
+      <topic>cmd_vel</topic>
+      <odom_publish_frequency>50</odom_publish_frequency>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_footprint</child_frame_id>
+    </plugin>
+  </gazebo>
 
 </robot>

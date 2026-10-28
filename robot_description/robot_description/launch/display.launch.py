@@ -20,7 +20,7 @@ def generate_launch_description():
             output='screen',
             parameters=[{'robot_description': robot_desc}]
         ),
-        # Interfaz con barras deslizables para mover las llantas
+        # Interfaz con barras deslizables para mover las llantas falsamente
         Node(
             package='joint_state_publisher_gui',
             executable='joint_state_publisher_gui',
